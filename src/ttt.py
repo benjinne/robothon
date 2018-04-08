@@ -49,42 +49,160 @@ def takePic():
 		namedWindow("cam-test",100)
 		imshow("cam-test",bw)
 		imwrite("board.jpg",bw) #save image
+	return bw
 
+##########################################################################################################
+
+def top(img):
+	h,w = img.shape
+	for y in range(h):
+		for x in range(w):
+			if(img[y, x] == 255):
+				return y
+
+def bottom(img):
+	h,w = img.shape
+	for y in range(h):
+		for x in range(w):
+			if(img[h-y-1, x] == 255):
+				return h-y-1
+				
+def middleSeperation(img):
+	left = 0
+	right = 0
+	middle = int((bottom(img) + top(img)) / 2)
+	h,w = img.shape
+	for x in range(w):
+		if(img[middle, x] == 255):
+			left = x
+			break;
+	for x in range(w):
+		if(img[middle, w-x-1] == 255):
+			right = w-x-1
+			break
+	return right-left	
+	
+#returns true or false
+def isO(img):
+	if(middleSeperation(img) > 45):
+		print('o')
+		return 2
+	else:
+		print('x')
+		return 1
+
+def isEmpty(board):
+	for y in range(3):
+		for x in range(3):
+			if(board[y][x] == 0):
+				return True
+	return False
+			
+#returns 0 if no winner, 1 if x wins, 2 if o wins
+def check(board):
+	testx = 0;
+	testo = 0;
+	won = 0;
+	#test rows
+	for y in range(3):
+		for x in range(3):
+			if(board[y][x] == 1):
+				testx += 1
+			else:
+				testx = 0
+			if(board[y][x] == 2):
+				testo += 1
+			else:
+				testo = 0
+		if(testx == 3):
+			return 1
+		elif(testo == 3):
+			return 2
+		else:
+			testx = 0
+			texto = 0
+			
+			
+	#test columns
+	for x in range(3):
+		for y in range(3):
+			if(board[y][x] == 1):
+				testx += 1
+			else:
+				testx = 0
+			if(board[y][x] == 2):
+				testo += 1
+			else:
+				testo = 0
+		if(testx == 3):
+			return 1
+		elif(testo == 3):
+			return 2
+		else:
+			testx = 0
+			testo = 0
+			
+	#test diagonals
+	if(board[0][0] == 1 and board[1][1] == 1 and board[2][2] == 1):
+		return 1
+	elif(board[0][0] == 2 and board[1][1] == 2 and board[2][2] == 2):
+		return 2
+	elif(board[0][2] == 1 and board[1][1] == 1 and board[2][0] == 1):
+		return 1
+	elif(board[0][2] == 2 and board[1][1] == 2 and board[2][0] == 2):
+		return 2
+	return 0
+	
+##########################################################################################################
+	
 if succ:
-	moveto(camera)
-	takePic()
-	#moveto(boardup)
-	#moveto(board1)
-	#moveto(board6)
-	#moveto(boardup)
-	#moveto(board2)
-	#moveto(board5)
-	#moveto(boardup)
-	#moveto(board8)
-	#moveto(board3)
-	#moveto(boardup)
-	#moveto(board7)
-	#moveto(board4)
-	#moveto(boardup)
+	game = True
 	
+	moveto(boardup)
+	moveto(board1)
+	moveto(board6)
+	moveto(boardup)
+	moveto(board2)
+	moveto(board5)
+	moveto(boardup)
+	moveto(board8)
+	moveto(board3)
+	moveto(boardup)
+	moveto(board7)
+	moveto(board4)
+	moveto(boardup)
 	waitKey(0)
-	destroyWindow("cam-test")
-		
 	
+	w, h = 3, 3;
+	board = [[0 for x in range(w)] for y in range(h)]
+	
+	while(game):
+		if(isEmpty()):
+			game = false
+			result = check()
+			if(check == 0):
+				print("tie")
+			elif(check == 1):
+				print("x,bot WON!")
+			elif(check == 2):
+				print("o, user WON!")
+			break;
+		
+		moveto(camera)
+		bw = takePic()
+		board[0][0] = isO(crop1)
+		board[0][1] = isO(crop2)
+		board[0][2] = isO(crop3)
+		board[1][0] = isO(crop4)
+		board[1][1] = isO(crop5)
+		board[1][2] = isO(crop6)
+		board[2][0] = isO(crop7)
+		board[2][1] = isO(crop8)
+		board[2][2] = isO(crop9)
+		
+		
+		
+		
+		
 else:
 	print "uh oh!"
-	
-	
-	
-	
-		
-	#[-3.422776524220602, -1.864903752003805, 2.6830501556396484, -0.8349884192096155, 1.40559983253479, 0.028590990230441093]
-	#[-3.2814484278308313, -1.8397348562823694, 2.6765763759613037, -0.8936460653888147, 1.483060598373413, 0.012354237958788872]
-	#[-3.2103965918170374, -1.693007771168844, 2.58252215385437, -0.9229639212237757, 1.4482475519180298, 0.012366222217679024]
-	#[-3.138555351887838, -1.603715721760885, 2.467524528503418, -0.8437069098102015, 1.6489073038101196, 0.012354237958788872]
-	#[-3.2501519362079065, -1.5155041853534144, 2.390697956085205, -0.8681967894183558, 1.5251061916351318, 0.012378206476569176]
-	#[-3.3186882177936, -1.527020279561178, 2.377598762512207, -0.7984989325152796, 1.5263299942016602, 0.012450112029910088]
-	#[-3.4527443091021937, -1.652250115071432, 2.4688668251037598, -0.6950834433185022, 1.4122941493988037, 0.012701780535280704]
-	#[-3.5628631750689905, -1.7930658499347132, 2.6133053302764893, -0.819671932850973, 1.1924992799758911, 0.01258193887770176]
-	
-	#[-3.3740573565112513, -1.8141472975360315, 2.407045841217041, -0.6599496046649378, 1.3523688316345215, 0.01261789072304964]

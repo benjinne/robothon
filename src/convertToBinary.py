@@ -35,8 +35,10 @@ def middleSeperation(img):
 #returns true or false
 def isO(img):
 	if(middleSeperation(img) > 45):
+		print('o')
 		return 2
 	else:
+		print('x')
 		return 1
 
 def isEmpty(board):
@@ -99,7 +101,6 @@ def check(board):
 		return 1
 	elif(board[0][2] == 2 and board[1][1] == 2 and board[2][0] == 2):
 		return 2
-	
 	return 0
 
 #places x in board
@@ -111,15 +112,17 @@ def check(board):
 
 bw = Canny(img, 30, 150)
 
-crop1 = bw[ 50:170  , 75:210  ]
-crop2 = bw[ 50:170  , 230:345 ]
-crop3 = bw[ 60:180  , 365:480 ]
-crop4 = bw[ 190:310 , 75:205  ]
-crop5 = bw[ 195:310 , 230:340 ]
-crop6 = bw[ 200:320 , 365:480 ]
-crop7 = bw[ 330:470 , 85:210  ]
-crop8 = bw[ 330:470 , 230:340 ]
-crop9 = bw[ 335:455 , 360:470 ]
+crop1 = bw[ 40:170  , 90:210  ]
+crop2 = bw[ 40:170  , 240:370 ]
+crop3 = bw[ 40:170  , 395:540 ]
+
+crop4 = bw[ 215:320 , 90:210  ]
+crop5 = bw[ 215:320 , 240:370 ]
+crop6 = bw[ 215:320 , 395:540 ]
+
+crop7 = bw[ 365:475 , 90:210  ]
+crop8 = bw[ 365:475 , 240:370 ]
+crop9 = bw[ 365:475 , 395:540 ]
 
 w, h = 3, 3;
 board = [[0 for x in range(w)] for y in range(h)]
