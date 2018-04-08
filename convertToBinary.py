@@ -31,13 +31,83 @@ def middleSeperation(img):
 			right = w-x-1
 			break
 	return right-left	
-
-#returns 'x' or 'o'
-def x_or_o(img):
-	if(middleSeperation(img) < 15):
-		return 'x'
+	
+#returns true or false
+def isO(img):
+	if(middleSeperation(img) > 45):
+		return 2
 	else:
-		return 'o'
+		return 1
+
+def isEmpty(board):
+	for y in range(3):
+		for x in range(3):
+			if(board[y][x] == 0):
+				return True
+	return False
+			
+#returns 0 if no winner, 1 if x wins, 2 if o wins
+def check(board):
+	testx = 0;
+	testo = 0;
+	won = 0;
+	#test rows
+	for y in range(3):
+		for x in range(3):
+			if(board[y][x] == 1):
+				testx += 1
+			else:
+				testx = 0
+			if(board[y][x] == 2):
+				testo += 1
+			else:
+				testo = 0
+		if(testx == 3):
+			return 1
+		elif(testo == 3):
+			return 2
+		else:
+			testx = 0
+			texto = 0
+			
+			
+	#test columns
+	for x in range(3):
+		for y in range(3):
+			if(board[y][x] == 1):
+				testx += 1
+			else:
+				testx = 0
+			if(board[y][x] == 2):
+				testo += 1
+			else:
+				testo = 0
+		if(testx == 3):
+			return 1
+		elif(testo == 3):
+			return 2
+		else:
+			testx = 0
+			testo = 0
+			
+	#test diagonals
+	if(board[0][0] == 1 and board[1][1] == 1 and board[2][2] == 1):
+		return 1
+	elif(board[0][0] == 2 and board[1][1] == 2 and board[2][2] == 2):
+		return 2
+	elif(board[0][2] == 1 and board[1][1] == 1 and board[2][0] == 1):
+		return 1
+	elif(board[0][2] == 2 and board[1][1] == 2 and board[2][0] == 2):
+		return 2
+	
+	return 0
+
+#places x in board
+#def robots_turn(board):
+#	for y in range(3):
+#		for x in range(3):
+#			if(board[y][x]):
+			#nothing yet
 
 bw = Canny(img, 30, 150)
 
@@ -51,16 +121,19 @@ crop7 = bw[ 330:470 , 85:210  ]
 crop8 = bw[ 330:470 , 230:340 ]
 crop9 = bw[ 335:455 , 360:470 ]
 
+w, h = 3, 3;
+board = [[0 for x in range(w)] for y in range(h)]
+board[0][0] = isO(crop1)
+board[0][1] = isO(crop2)
+board[0][2] = isO(crop3)
+board[1][0] = isO(crop4)
+board[1][1] = isO(crop5)
+board[1][2] = isO(crop6)
+board[2][0] = isO(crop7)
+board[2][1] = isO(crop8)
+board[2][2] = isO(crop9)
 
-print(x_or_o(crop1))
-print(x_or_o(crop2))
-print(x_or_o(crop3))
-print(x_or_o(crop4))
-print(x_or_o(crop5))
-print(x_or_o(crop6))
-print(x_or_o(crop7))
-print(x_or_o(crop8))
-print(x_or_o(crop9))
+print(isEmpty(board))
 
 imshow("benlinne", bw)
 waitKey(0)
